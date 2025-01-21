@@ -6,6 +6,7 @@ import com.myproject.order.kafka.KafkaProducer;
 import com.myproject.order.model.*;
 import com.myproject.order.repository.OrderRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ public class OrderServiceImpl implements OrderService{
         this.source = host + ":" + port;
     }
 
+    @Transactional
     @Override
     public Optional<Order> save(Order order) {
         if(orderRepository.findById(order.getOrderId()).isPresent())
@@ -51,6 +53,7 @@ public class OrderServiceImpl implements OrderService{
         return order;
     }
 
+    @Transactional
     @Override
     public void updateStatus(Order order, OrderStatus status) {
         order.setStatus(status);
