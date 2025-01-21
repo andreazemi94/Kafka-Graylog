@@ -1,0 +1,1 @@
+{"type":"record","name":"InvoiceDTO","namespace":"com.myproject.dto","fields":[{"name":"invoiceId","type":{"type":"string","avro.java.string":"String"}},{"name":"customerId","type":"long"},{"name":"orderId","type":"long"},{"name":"invoiceDate","type":"long"},{"name":"totalAmount","type":"double"}]}

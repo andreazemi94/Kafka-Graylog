@@ -1,0 +1,45 @@
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: invoice-microservice
+    facility-num: 5
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/graylog-publisher
+    username: graylog-publisher_user
+    password: graylog-publisher
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:29092
+    properties:
+      schema:
+        registry:
+          cache-capacity: 10000
+          url: http://localhost:8085
+
+    topic:
+      invoice: microservice-invoice
+      order: microservice-order
+      graylog: graylog-publisher
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+
+    consumer:
+      group-id: invoice-microservice-group
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true

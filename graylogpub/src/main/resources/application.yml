@@ -1,0 +1,29 @@
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: graylogpub-microservice
+    facility-num: 5
+
+  kafka:
+    bootstrap-servers: localhost:29092
+    properties:
+      schema:
+        registry:
+          cache-capacity: 10000
+          url: http://localhost:8085
+
+    topic:
+      graylog: graylog-publisher
+      graylog-pub: graylog-message
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+      group-id: graylog-message-microservice-group
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
