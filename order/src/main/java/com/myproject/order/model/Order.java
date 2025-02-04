@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
 
-@Data @NoArgsConstructor
+@Data @NoArgsConstructor @Builder @AllArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order {
