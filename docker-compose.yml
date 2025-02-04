@@ -6,9 +6,9 @@ networks:
     driver: bridge
 
 volumes:
-  postgres-volume:
-  mongo-data:
-  es-data:
+  postgres-volume-kafka-graylog:
+  mongo-data-kafka-graylog:
+  es-data-kafka-graylog:
 
 services:
   zookeeper:
@@ -107,7 +107,7 @@ services:
     image: mongo:5.0
     container_name: my-project-mongo
     volumes:
-      - mongo-data:/data/db
+      - mongo-data-kafka-graylog:/data/db
     networks:
       my-project:
         aliases:
@@ -123,7 +123,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - es-data:/usr/share/elasticsearch/data
+      - es-data-kafka-graylog:/usr/share/elasticsearch/data
     networks:
       my-project:
         aliases:
@@ -141,7 +141,7 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
       - SCHED_DB_BACKUP="false"
     volumes:
-      - postgres-volume:/var/lib/postgresql/data/pgdata
+      - postgres-volume-kafka-graylog:/var/lib/postgresql/data/pgdata
     networks:
       my-project:
         aliases:
