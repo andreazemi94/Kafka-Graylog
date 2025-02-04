@@ -33,7 +33,6 @@ public class KafkaProducer {
     private final KafkaTemplate<String, ? super SpecificRecord> kafka;
     private final GraylogProducer graylogProducer;
     private final ModelMapper modelMapper;
-    private final AdminClient adminClient;
 
     public <T extends SpecificRecord> void sendMessage(String source, String messageKey, T object, Type destinationType ) {
         kafka.send(kafkaTopic, messageKey, object).whenCompleteAsync((topic,error)-> logMessage(error, source, modelMapper.map(object, destinationType)));
@@ -45,33 +44,6 @@ public class KafkaProducer {
                 : String.format("Error to send %s: %s", object.getClass().getSimpleName(),error.getMessage());
         Integer logLevel = (Objects.isNull(error)) ? 1 : 5;
         graylogProducer.sendLogMessage(source, message, logLevel);
-    }
-
-    @PostConstruct
-    private void printTopics(){
-        try {
-            adminClient.listTopics().names().get().forEach(topicName->{
-                try {
-                    log.info("============================================");
-                    log.info("============================================");
-                    log.info("topic-->" + topicName );
-                    ConfigResource resource = new ConfigResource(ConfigResource.Type.TOPIC, topicName);
-                    DescribeConfigsResult result = adminClient.describeConfigs(java.util.Collections.singletonList(resource));
-                    Map<ConfigResource, Config> configMap = result.all().get();
-                    Config topicConfig = configMap.get(resource);
-                    topicConfig.entries().forEach(entry->{
-                        log.info("Config Name: " + entry.name() + " | Value: " + entry.value());
-                    });
-                    log.info("============================================");
-                    log.info("============================================");
-                } catch (InterruptedException | ExecutionException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
