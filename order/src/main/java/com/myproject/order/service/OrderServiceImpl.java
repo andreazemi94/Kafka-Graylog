@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService{
         graylogProducer.sendLogMessage(source, "Set order date: " + order, 1);
         orderRepository.save(order);
         graylogProducer.sendLogMessage(source, "Order created successfully in the database: " + order, 1);
-        kafkaProducer.sendMessage(source, order.getOrderId().toString(), modelMapperOrder.map(order, OrderDto.class), Order.class);
+        kafkaProducer.sendMessage(source, order.getOrderId().toString(), order, Order.class);
         return order;
     }
 

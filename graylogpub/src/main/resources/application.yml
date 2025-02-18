@@ -6,7 +6,7 @@ spring:
     import: configserver:http://localhost:8888
   cloud:
     config:
-      uri: http://localhost:8888  # URL of the Config Server
-      label: master  # The label (branch) of the config repository, typically 'master' or a custom one
-      profile: dev  # The profile to load configuration for (e.g., dev, prod)
+      uri: http://localhost:8888
+      label: master
+      profile: dev
       failFast: true

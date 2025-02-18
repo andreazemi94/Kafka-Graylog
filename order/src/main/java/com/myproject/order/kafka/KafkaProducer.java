@@ -8,6 +8,7 @@ import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.Config;
 import org.apache.kafka.clients.admin.DescribeConfigsResult;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.config.ConfigResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,12 +31,15 @@ public class KafkaProducer {
     private String schemaRegistryUrl;
     @Value("${spring.kafka.properties.schema.registry.cache-capacity}")
     private Integer schemaRegistryCacheCapacity;
-    private final KafkaTemplate<String, ? super SpecificRecord> kafka;
+    private final KafkaTemplate<String, Object> kafka;
     private final GraylogProducer graylogProducer;
     private final ModelMapper modelMapper;
 
-    public <T extends SpecificRecord> void sendMessage(String source, String messageKey, T object, Type destinationType ) {
-        kafka.send(kafkaTopic, messageKey, object).whenCompleteAsync((topic,error)-> logMessage(error, source, modelMapper.map(object, destinationType)));
+    public <T extends SpecificRecord> void sendMessage(String source, String messageKey, Object object, Type destinationType ) {
+        ProducerRecord<String,Object> record = new ProducerRecord<>(kafkaTopic,messageKey,object);
+        kafka.send(record)
+                .whenCompleteAsync((topic,error)->
+                        logMessage(error, source, modelMapper.map(object, destinationType)));
     }
 
     private <D> void logMessage(Throwable error, String source, D object){
