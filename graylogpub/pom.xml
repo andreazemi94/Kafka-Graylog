@@ -49,7 +49,21 @@
 		<modelMapperVersion>3.0.0</modelMapperVersion>
 		<avroPluginVersion>1.10.2</avroPluginVersion>
 		<mavenCompilerVersion>1.8</mavenCompilerVersion>
+		<spring-cloud.version>2024.0.0</spring-cloud.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -60,6 +74,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-config-client</artifactId>
 		</dependency>
 
 		<!-- Lombok (for compileOnly and annotationProcessor) -->
@@ -106,74 +125,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-			<plugin>
-				<groupId>it.ozimov</groupId>
-				<artifactId>yaml-properties-maven-plugin</artifactId>
-				<version>${yamlPluginVersion}</version>
-				<executions>
-					<execution>
-						<phase>initialize</phase>
-						<goals>
-							<goal>read-project-properties</goal>
-						</goals>
-						<configuration>
-							<files>
-								<file>src/main/resources/application.yml</file>
-							</files>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>io.confluent</groupId>
-				<artifactId>kafka-schema-registry-maven-plugin</artifactId>
-				<version>${schemaRegistryPlugVers}</version>
-				<configuration>
-					<schemaRegistryUrls>
-						<!--suppress UnresolvedMavenProperty -->
-						<param>${spring.kafka.properties.schema.registry.url}</param>
-					</schemaRegistryUrls>
-					<outputDirectory>src/main/resources/avro</outputDirectory>
-					<subjectPatterns>
-						<!--suppress UnresolvedMavenProperty -->
-						<param>^${spring.kafka.topic.graylog}-(key|value)$</param>
-					</subjectPatterns>
-					<compatibilityLevels/>
-					<messagePath/>
-					<outputPath/>
-					<previousSchemaPaths/>
-					<schemas/>
-					<subjects/>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>download</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.avro</groupId>
-				<artifactId>avro-maven-plugin</artifactId>
-				<version>${avroPluginVersion}</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>schema</goal>
-						</goals>
-						<configuration>
-							<sourceDirectory>src/main/resources/avro/</sourceDirectory>
-							<outputDirectory>src/main/java/</outputDirectory>
-							<stringType>String</stringType>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
