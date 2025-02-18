@@ -17,6 +17,6 @@ spring:
 
     consumer:
       group-id: graylog-message-microservice-group
-      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         specific.avro.reader: true
