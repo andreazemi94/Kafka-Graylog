@@ -9,6 +9,6 @@ spring:
           clone-on-start: true
           default-label: master
           search-paths:
-            - resources/dev
+            - resources/local
 server:
   port: 8888
