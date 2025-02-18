@@ -8,5 +8,7 @@ spring:
           uri: https://github.com/andreazemi94/Kafka-Graylog
           clone-on-start: true
           default-label: master
+          search-paths:
+            - resources/dev
 server:
   port: 8888

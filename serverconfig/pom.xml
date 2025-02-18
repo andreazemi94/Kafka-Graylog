@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.myproject</groupId>
-	<artifactId>server.config</artifactId>
+	<artifactId>serverconfig</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>server.config</name>
 	<description>My Project Cloud Config</description>
