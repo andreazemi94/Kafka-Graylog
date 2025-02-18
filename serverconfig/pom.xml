@@ -11,7 +11,7 @@
 	<groupId>com.myproject</groupId>
 	<artifactId>serverconfig</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>server.config</name>
+	<name>serverconfig</name>
 	<description>My Project Cloud Config</description>
 	<url/>
 	<licenses>
